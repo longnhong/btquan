@@ -1,7 +1,7 @@
 ﻿package system
 
 import (
-	"btquan/x/mlog"
+	"LongTM/btq/btquan/x/mlog"
 )
 
 var logSys = mlog.NewTagLog("System")

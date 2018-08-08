@@ -1,7 +1,7 @@
 package mongodb
 
 import (
-	"btquan/x/rest"
+	"LongTM/btq/btquan/x/rest"
 	"fmt"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"

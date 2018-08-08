@@ -1,7 +1,7 @@
 package web
 
 import (
-	"btquan/x/rest"
+	"LongTM/btq/btquan/x/rest"
 	"strconv"
 	"strings"
 )

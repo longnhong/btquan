@@ -1,8 +1,8 @@
 package video
 
 import (
-	"btquan/o/auth/user"
-	"btquan/x/db/mongodb"
+	"LongTM/btq/btquan/o/auth/user"
+	"LongTM/btq/btquan/x/db/mongodb"
 )
 
 var VideoTable = mongodb.NewTable("tk_booking", "tkbk", 18)

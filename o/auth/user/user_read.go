@@ -1,7 +1,7 @@
 package user
 
 import (
-	"btquan/x/rest"
+	"LongTM/btq/btquan/x/rest"
 	"errors"
 	"gopkg.in/mgo.v2/bson"
 )

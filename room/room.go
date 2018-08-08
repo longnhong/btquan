@@ -1,8 +1,8 @@
 package room
 
 import (
-	"btquan/x/rest"
-	"btquan/x/socket"
+	"LongTM/btq/btquan/x/rest"
+	"LongTM/btq/btquan/x/socket"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

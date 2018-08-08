@@ -2,12 +2,12 @@ package main
 
 import (
 	// 1. init first
-	_ "btquan/init"
+	_ "LongTM/btq/btquan/init"
 	// 2. iniit 2nd
-	"btquan/api"
-	"btquan/common"
-	"btquan/middleware"
-	"btquan/room"
+	"LongTM/btq/btquan/api"
+	"LongTM/btq/btquan/common"
+	"LongTM/btq/btquan/middleware"
+	"LongTM/btq/btquan/room"
 	"github.com/gin-gonic/gin"
 	//"net/http"
 )

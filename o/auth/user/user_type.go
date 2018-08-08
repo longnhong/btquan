@@ -1,7 +1,7 @@
 package user
 
 import (
-	"btquan/x/db/mongodb"
+	"LongTM/btq/btquan/x/db/mongodb"
 )
 
 type User struct {

@@ -1,11 +1,11 @@
 package init
 
 import (
-	"btquan/common"
-	"btquan/x/config"
-	"btquan/x/db/mongodb"
-	"btquan/x/fcm"
-	"btquan/x/mlog"
+	"LongTM/btq/btquan/common"
+	"LongTM/btq/btquan/x/config"
+	"LongTM/btq/btquan/x/db/mongodb"
+	"LongTM/btq/btquan/x/fcm"
+	"LongTM/btq/btquan/x/mlog"
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -110,8 +110,8 @@ func initConfigSytem() {
 		EndOut:             endOut,
 		ScanNear:           scanNear,
 		CyclePushDay:       cyclePushDay,
-		CyclePushVideo:    cyclePushVideo,
+		CyclePushVideo:     cyclePushVideo,
 		CycleDayMissed:     cycleDayMissed,
-		UserVideo:      tkDay,
+		UserVideo:          tkDay,
 	}
 }

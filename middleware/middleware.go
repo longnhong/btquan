@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	//"btquan/o/push_token"
-	"btquan/x/rest"
+	//"LongTM/btq/btquan/o/push_token"
+	"LongTM/btq/btquan/x/rest"
 	// "fmt"
 	// "g/x/web"
-	"btquan/x/mlog"
+	"LongTM/btq/btquan/x/mlog"
 	"github.com/gin-gonic/gin"
 )
 

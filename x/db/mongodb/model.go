@@ -1,7 +1,7 @@
 package mongodb
 
 import (
-	"btquan/x/math"
+	"LongTM/btq/btquan/x/math"
 	"time"
 )
 

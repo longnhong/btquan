@@ -1,7 +1,7 @@
 package mongodb
 
 import (
-	"btquan/x/mlog"
+	"LongTM/btq/btquan/x/mlog"
 	"gopkg.in/mgo.v2"
 )
 

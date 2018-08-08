@@ -1,7 +1,7 @@
 package rest
 
 import (
-	"btquan/x/rest/validator"
+	"LongTM/btq/btquan/x/rest/validator"
 
 	"github.com/gin-gonic/gin"
 )
