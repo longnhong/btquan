@@ -8,6 +8,8 @@ import (
 var DenTable = mongodb.NewTable("dens", "d", 20)
 var DenHstTable = mongodb.NewTable("den_hst", "dhst", 20)
 
+type Ds []*Den
+
 type Den struct {
 	mongodb.BaseModel `bson:",inline"`
 	IP                string `json:"ip" bson:"ip"`
@@ -20,6 +22,23 @@ type Den struct {
 
 func (d *Den) InsertDen() error {
 	return DenTable.Create(d)
+}
+
+func UpdateDen(ip string, online string, pin string, hengio string, cnum string) error {
+	var hst = &DenHST{
+		Cnum:   cnum,
+		IP:     ip,
+		Online: online,
+		HenGio: hengio,
+		Pin:    pin,
+	}
+	hst.InsertDenHst()
+	return DenTable.Update(bson.M{"cnum": cnum},
+		bson.M{"online": online,
+			"pin":     pin,
+			"hen_gio": hengio,
+			"ip":      cnum,
+		})
 }
 
 func GetAllDen() ([]*Den, error) {
@@ -48,7 +67,7 @@ func GetAllDenHst() ([]*DenHST, error) {
 	var a []*DenHST
 	return a, DenHstTable.FindWhere(bson.M{}, &a)
 }
-func GetDenHstByNum(num string) (*DenHST, error) {
-	var a *DenHST
+func GetDenHstByNum(num string) ([]*DenHST, error) {
+	var a []*DenHST
 	return a, DenHstTable.FindWhere(bson.M{"cnum": num}, &a)
 }

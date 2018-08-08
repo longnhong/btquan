@@ -8,7 +8,6 @@ import (
 	"btquan/common"
 	"btquan/middleware"
 	"btquan/room"
-	"btquan/system"
 	"github.com/gin-gonic/gin"
 	//"net/http"
 )
@@ -23,12 +22,10 @@ func main() {
 	//static
 	// router.StaticFS("/static", http.Dir("./upload"))
 	// router.StaticFS("/app", http.Dir("./app"))
-	var tkWorker = system.Start()
-	tkWorker.Launch()
 
 	//api
 	rootAPI := router.Group("/api")
-	api.InitApi(rootAPI, tkWorker)
+	api.InitApi(rootAPI)
 	//ws
 	room.NewRoomServer(router.Group("/room"))
 	router.Run(common.ConfigSystemBooking.PortBooking)
