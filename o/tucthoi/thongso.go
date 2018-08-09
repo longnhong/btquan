@@ -32,6 +32,12 @@ func (d *ThongSo) InsertThongSo() error {
 	return ThongSoTable.Create(d)
 }
 
+func GetThongSo() (*ThongSo, error) {
+	var ts *ThongSo
+	err := ThongSoTable.FindOne(bson.M{}, &ts)
+	return ts, err
+}
+
 func UpdateThongSo(ts ThongSoStruct) error {
 	_, err := ThongSoTable.UpdateAll(bson.M{}, bson.M{"$set": ts})
 	return err
@@ -50,4 +56,10 @@ func InsertThongSoHst(ts *ThongSoStruct) error {
 		NhietDo:        ts.NhietDo,
 	}
 	return ThongSoHSTTable.Create(&tts)
+}
+
+func GetThongSoHst() ([]*ThongSo, error) {
+	var ts []*ThongSo
+	err := ThongSoTable.FindWhere(bson.M{}, &ts)
+	return ts, err
 }

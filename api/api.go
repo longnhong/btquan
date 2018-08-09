@@ -2,6 +2,7 @@ package api
 
 import (
 	"LongTM/btq/btquan/o/den"
+	"LongTM/btq/btquan/o/hen_gio"
 	"LongTM/btq/btquan/o/tucthoi"
 	"LongTM/btq/btquan/x/rest"
 	"github.com/gin-gonic/gin"
@@ -27,14 +28,67 @@ func NewAuthenServer(parent *gin.RouterGroup) {
 	}
 	s.GET("/get_all", s.handleGetAll)
 	s.GET("/update", s.handleUpdate)
+	s.GET("/get_thongso", s.handleGetThongSo)
 	s.GET("/get_num", s.handleGetNum)
 	s.GET("/get_hst_num", s.handleGetHst)
+	s.GET("/get_hst", s.handleGetAllHst)
+	s.GET("/get_ts_hst", s.handleGetTsHst)
+	s.GET("/get_den_hst", s.handleDenHst)
+	s.GET("/get_hen_gio", s.handleGetHenGio)
+	s.POST("/hen_gio", s.handleHenGio)
+
 	s.POST("/insert_light", s.handleInsert)
+}
+
+func (s *AuthenServer) handleHenGio(ctx *gin.Context) {
+	var body = hen_gio.HGio{}
+	rest.AssertNil(ctx.BindJSON(&body))
+	err := hen_gio.InsertHenGio(body)
+	rest.AssertNil(err)
+	var hg = &hen_gio.HenGio{
+		HGio: body,
+	}
+	hg.InsertHst()
+	s.SendData(ctx, nil)
+}
+
+func (s *AuthenServer) handleGetHenGio(ctx *gin.Context) {
+	var ts, err = hen_gio.GetHenGio()
+	rest.AssertNil(err)
+	s.SendData(ctx, ts)
+}
+
+func (s *AuthenServer) handleGetTsHst(ctx *gin.Context) {
+	var ts, err = tucthoi.GetThongSoHst()
+	rest.AssertNil(err)
+	s.SendData(ctx, ts)
+}
+
+func (s *AuthenServer) handleDenHst(ctx *gin.Context) {
+	var ts, err = den.GetAllDenHst()
+	rest.AssertNil(err)
+	s.SendData(ctx, ts)
 }
 
 func (s *AuthenServer) handleGetAll(ctx *gin.Context) {
 	var ds = s.Ds
 	s.SendData(ctx, ds)
+}
+
+func (s *AuthenServer) handleGetAllHst(ctx *gin.Context) {
+	var ds, err = den.GetAllDenHst()
+	rest.AssertNil(err)
+	s.SendData(ctx, ds)
+}
+
+func (s *AuthenServer) handleGetThongSo(ctx *gin.Context) {
+	var ts, err = tucthoi.GetThongSo()
+	rest.AssertNil(err)
+
+	s.SendData(ctx, map[string]interface{}{
+		"thong_so": ts,
+		"dens":     s.Ds,
+	})
 }
 
 func (s *AuthenServer) handleInsert(ctx *gin.Context) {
