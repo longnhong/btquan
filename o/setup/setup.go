@@ -27,6 +27,12 @@ type UpdateSetup struct {
 	Manual           string `json:"manual" bson:"manual"`
 	ManualOn1        string `json:"manual_on1" bson:"manual_on1"`
 	ManualOn2        string `json:"manual_on2" bson:"manual_on2"`
+	IntUpServer      int    `json:"-" bson:"int_up_server"`
+	IntUpClient      int    `json:"-" bson:"int_up_client"`
+	TimeOldOn1       string `json:"-" bson:"time_old_on1"`
+	TimeOldOff1      string `json:"-" bson:"time_old_off1"`
+	TimeOldOn2       string `json:"-" bson:"time_old_on2"`
+	TimeOldOff2      string `json:"-" bson:"time_old_off2"`
 }
 
 func InsertSetup(d UpdateSetup) error {
@@ -42,7 +48,7 @@ func InsertSetup(d UpdateSetup) error {
 
 func GetSetup() (*Setup, error) {
 	var set *Setup
-	return nil, SetupTable.FindOne(bson.M{}, &set)
+	return set, SetupTable.FindOne(bson.M{}, &set)
 }
 
 func Update(id string, set UpdateSetup) error {
