@@ -18,6 +18,11 @@ func (r *JsonRender) SendData(ctx *gin.Context, data interface{}) {
 		"code":   200,
 	})
 }
+
+func (r *JsonRender) SendDataString(ctx *gin.Context, data interface{}) {
+	ctx.String(STATUS_OK, "%s", data)
+}
+
 func (r *JsonRender) DecodeBody(ctx *gin.Context, data interface{}) {
 	AssertNil(BadRequest(ctx.BindJSON(&data).Error()))
 	AssertNil(BadRequest(validator.Validate(data).Error()))
