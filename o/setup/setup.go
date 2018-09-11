@@ -33,6 +33,7 @@ type UpdateSetup struct {
 	TimeOldOff1      string `json:"-" bson:"time_old_off1"`
 	TimeOldOn2       string `json:"-" bson:"time_old_on2"`
 	TimeOldOff2      string `json:"-" bson:"time_old_off2"`
+	IsUp             bool   `json:"-" bson:"is_up"`
 }
 
 func InsertSetup(d UpdateSetup) error {

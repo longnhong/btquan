@@ -167,7 +167,7 @@ func (s *AuthenServer) handleUpdate(ctx *gin.Context) {
 		tucthoi.InsertThongSoHst(&ts)
 		s.SendData(ctx, nil)
 	} else if len(arr) == 49 {
-		if s.Setup != nil && s.Setup.ValueClient == data {
+		if s.Setup != nil && s.Setup.ValueClient == data && s.Setup.IntUpServer == s.Setup.IntUpClient {
 			fmt.Println("Vô Trùng")
 			return
 		} else if s.Setup != nil && s.Setup.ValueClient != data && s.Setup.IntUpServer == s.Setup.IntUpClient {
@@ -263,6 +263,7 @@ func (s *AuthenServer) handleUpdate(ctx *gin.Context) {
 
 			s.Setup = &set
 			setup.InsertSetup(settup)
+
 			s.SendDataString(ctx, "[,000000F1,0022,10,0001,0510,"+settup.TimeOn1+",2368,]")
 			s.SendDataString(ctx, "[,000000F1,0022,10,0001,0511,"+settup.TimeOff1+",2368,]")
 			s.SendDataString(ctx, "[,000000F1,0022,10,0001,0518,"+settup.TimeOn2+",2368,]")
@@ -270,6 +271,7 @@ func (s *AuthenServer) handleUpdate(ctx *gin.Context) {
 			return
 
 		} else if s.Setup != nil && s.Setup.IntUpServer > s.Setup.IntUpClient {
+
 			fmt.Println("Vô cài đặt tại server")
 			s.Setup.ValueClient = data
 			var a = strings.Split(s.Setup.TimeOn1, ":")
@@ -292,27 +294,52 @@ func (s *AuthenServer) handleUpdate(ctx *gin.Context) {
 			if len(d) > 1 {
 				timeOff2 = b[0] + b[1]
 			}
-			fmt.Printf("Time On1", s.Setup.TimeOn1)
-			fmt.Printf("Time Old On 1", s.Setup.TimeOldOn1)
+			fmt.Printf("Time On1 Server", s.Setup.TimeOn1)
+			fmt.Printf("Time On 1 client", arr[12])
 			fmt.Printf("Time On2", arr[20])
 			fmt.Printf("Time Off 2", arr[21])
+			var isUp = true
+			var timeOn1s = arr[12]
+			var timeOff1s = arr[13]
+			var timeOn2s = arr[20]
+			var timeOff2s = arr[21]
+			var nhietDo, _ = strconv.Atoi(arr[6])
+			var doAm, _ = strconv.Atoi(arr[7])
+			var nhietDoS = strconv.Itoa(nhietDo)
+			var doAmS = strconv.Itoa(doAm)
+			if nhietDoS != s.Setup.NhietDo {
+				isUp = false
+				s.SendDataString(ctx, "[,000000F1,0022,10,0001,050A,00"+s.Setup.NhietDo+",2368,]")
+			}
+			if doAmS != s.Setup.DoAm {
+				isUp = false
+				s.SendDataString(ctx, "[,000000F1,0022,10,0001,050B,00"+s.Setup.DoAm+",2368,]")
+			}
 
-			if s.Setup.TimeOn1 != s.Setup.TimeOldOn1 {
+			if s.Setup.TimeOn1 != timeOn1s {
+				isUp = false
 				s.Setup.TimeOldOn1 = s.Setup.TimeOn1
 				s.SendDataString(ctx, "[,000000F1,0022,10,0001,0510,"+timeOn1+",2368,]")
 			}
-			if s.Setup.TimeOn2 != s.Setup.TimeOldOn2 {
+			if s.Setup.TimeOn2 != timeOn2s {
+				isUp = false
 				s.Setup.TimeOldOn2 = s.Setup.TimeOn2
 				s.SendDataString(ctx, "[,000000F1,0022,10,0001,0518,"+timeOn2+",2368,]")
 			}
 
-			if s.Setup.TimeOff1 != s.Setup.TimeOldOff1 {
+			if s.Setup.TimeOff1 != timeOff1s {
+				isUp = false
 				s.Setup.TimeOldOff1 = s.Setup.TimeOff1
 				s.SendDataString(ctx, "[,000000F1,0022,10,0001,0511,"+timeOff1+",2368,]")
 			}
-			if s.Setup.TimeOff2 != s.Setup.TimeOldOff2 {
+			if s.Setup.TimeOff2 != timeOff2s {
+				isUp = false
 				s.Setup.TimeOldOff2 = s.Setup.TimeOff2
 				s.SendDataString(ctx, "[,000000F1,0022,10,0001,0519,"+timeOff2+",2368,]")
+			}
+
+			if isUp {
+				s.Setup.IntUpClient = s.Setup.IntUpServer
 			}
 		}
 	}
