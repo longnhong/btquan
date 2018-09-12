@@ -8,6 +8,7 @@ import (
 )
 
 var SetupTable = mongodb.NewTable("setup", "set", 20)
+var SetupHstTable = mongodb.NewTable("setup_hst", "sht", 20)
 
 type Setup struct {
 	mongodb.BaseModel `bson:",inline"`
@@ -33,7 +34,7 @@ type UpdateSetup struct {
 	TimeOldOff1      string `json:"-" bson:"time_old_off1"`
 	TimeOldOn2       string `json:"-" bson:"time_old_on2"`
 	TimeOldOff2      string `json:"-" bson:"time_old_off2"`
-	IsUp             bool   `json:"-" bson:"is_up"`
+	Type             string `json:"type" bson:"type"`
 }
 
 func InsertSetup(d UpdateSetup) error {
@@ -54,4 +55,13 @@ func GetSetup() (*Setup, error) {
 
 func Update(id string, set UpdateSetup) error {
 	return SetupTable.UnsafeUpdateByID(id, set)
+}
+
+func (s *Setup) InsertHst() error {
+	return SetupHstTable.Create(s)
+}
+
+func GetSetupHst() ([]*Setup, error) {
+	var sets []*Setup
+	return sets, SetupHstTable.FindWhere(bson.M{}, &sets)
 }

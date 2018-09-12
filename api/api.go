@@ -34,9 +34,14 @@ func NewAuthenServer(parent *gin.RouterGroup) {
 	}
 	s.GET("/get_all", s.handleGetAll)
 	s.GET("/update", s.handleUpdate)
+
 	s.POST("/server_update", s.handleServerUpdate)
 	s.GET("/get_setup", s.handleSettup)
+	s.GET("/get_setup_hst", s.handleSetupHst)
+
 	s.GET("/get_thongso", s.handleGetThongSo)
+	s.GET("/get_thongso_hst", s.handleGetThongSoHst)
+
 	s.GET("/get_num", s.handleGetNum)
 	s.GET("/get_hst_num", s.handleGetHst)
 	s.GET("/get_hst", s.handleGetAllHst)
@@ -47,9 +52,21 @@ func NewAuthenServer(parent *gin.RouterGroup) {
 
 	s.POST("/insert_light", s.handleInsert)
 }
+
+func (s *AuthenServer) handleSetupHst(ctx *gin.Context) {
+	var sets, _ = setup.GetSetupHst()
+	s.SendData(ctx, sets)
+}
+
+func (s *AuthenServer) handleGetThongSoHst(ctx *gin.Context) {
+	var sets, _ = tucthoi.GetThongSoHst()
+	s.SendData(ctx, sets)
+}
+
 func (s *AuthenServer) handleSettup(ctx *gin.Context) {
 	s.SendData(ctx, s.Setup)
 }
+
 func (s *AuthenServer) handleHenGio(ctx *gin.Context) {
 	var body = hen_gio.HGio{}
 	rest.AssertNil(ctx.BindJSON(&body))
@@ -121,6 +138,7 @@ func (s *AuthenServer) handleServerUpdate(ctx *gin.Context) {
 	set.TimeOldOn1 = s.Setup.TimeOldOn1
 	set.TimeOldOn2 = s.Setup.TimeOldOn2
 	s.Setup = &set
+	set.InsertHst()
 	s.SendData(ctx, setup.InsertSetup(body))
 }
 
@@ -233,7 +251,10 @@ func (s *AuthenServer) handleUpdate(ctx *gin.Context) {
 				s.SendDataString(ctx, "[,000000F1,0022,10,0001,0519,"+timeOff2+",2368,]")
 			}
 			set.TimeOldOff2 = settup.TimeOff2
+			set.Type = "Phần cứng"
 			s.Setup = &set
+			setup.InsertSetup(settup)
+			set.InsertHst()
 		} else if s.Setup == nil {
 			fmt.Println("Vô nil")
 			var nhietDo, _ = strconv.Atoi(arr[6])
@@ -260,10 +281,10 @@ func (s *AuthenServer) handleUpdate(ctx *gin.Context) {
 			var set = setup.Setup{
 				UpdateSetup: settup,
 			}
-
+			set.Type = "Ban đầu cài đặt"
 			s.Setup = &set
 			setup.InsertSetup(settup)
-
+			set.InsertHst()
 			s.SendDataString(ctx, "[,000000F1,0022,10,0001,0510,"+settup.TimeOn1+",2368,]")
 			s.SendDataString(ctx, "[,000000F1,0022,10,0001,0511,"+settup.TimeOff1+",2368,]")
 			s.SendDataString(ctx, "[,000000F1,0022,10,0001,0518,"+settup.TimeOn2+",2368,]")
@@ -341,6 +362,7 @@ func (s *AuthenServer) handleUpdate(ctx *gin.Context) {
 			if isUp {
 				s.Setup.IntUpClient = s.Setup.IntUpServer
 			}
+
 		}
 	}
 
